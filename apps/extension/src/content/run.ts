@@ -5,7 +5,9 @@ import type { TrackDetectedMessage } from '../types/messages'
  * Shared content-script runner: detect once on load, re-detect on SPA
  * navigation. Messaging only — all resolution logic lives in the background SW.
  */
-export function runContentScript(detect: () => Promise<TrackInfo | null>): void {
+export function runContentScript(
+  detect: () => Promise<TrackInfo | null>,
+): void {
   let lastUrl = ''
 
   const send = async () => {
@@ -13,7 +15,10 @@ export function runContentScript(detect: () => Promise<TrackInfo | null>): void 
     lastUrl = location.href
     const track = await detect()
     if (!track) return
-    const message: TrackDetectedMessage = { type: 'TRACK_DETECTED', payload: track }
+    const message: TrackDetectedMessage = {
+      type: 'TRACK_DETECTED',
+      payload: track,
+    }
     void chrome.runtime.sendMessage(message)
   }
 

@@ -21,7 +21,10 @@ export async function resolveViaBackend(track: TrackInfo): Promise<KeyResult> {
 }
 
 /** Persist an essentia result so the next lookup is a cache hit. */
-export async function cacheResult(track: TrackInfo, result: KeyResult): Promise<void> {
+export async function cacheResult(
+  track: TrackInfo,
+  result: KeyResult,
+): Promise<void> {
   await fetch(`${API_BASE}/tracks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -6,7 +6,9 @@ export async function detect(): Promise<TrackInfo | null> {
   const trackTitle = document.querySelector('.trackTitle')?.textContent?.trim()
   if (!trackTitle) return null
 
-  const artist = document.querySelector('#name-section h3 a, .albumTitle a')?.textContent?.trim()
+  const artist = document
+    .querySelector('#name-section h3 a, .albumTitle a')
+    ?.textContent?.trim()
 
   let audioUrl: string | undefined
   for (const script of document.querySelectorAll('script[data-tralbum]')) {

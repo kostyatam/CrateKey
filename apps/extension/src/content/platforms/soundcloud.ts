@@ -3,7 +3,8 @@ import { runContentScript } from '../run'
 
 /** SoundCloud has no key on the page — backend lookup / essentia handle it. */
 export async function detect(): Promise<TrackInfo | null> {
-  const isTrackPage = document.querySelector('.listenEngagement, [class*="soundTitle"]') !== null
+  const isTrackPage =
+    document.querySelector('.listenEngagement, [class*="soundTitle"]') !== null
   if (!isTrackPage) return null
 
   const title = document.title

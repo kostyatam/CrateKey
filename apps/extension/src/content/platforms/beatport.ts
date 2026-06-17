@@ -6,8 +6,12 @@ export async function detect(): Promise<TrackInfo | null> {
   if (!/\/track\//.test(location.pathname)) return null
 
   const title = document.title
-  const artist = document.querySelector('[data-testid="artist-name"]')?.textContent?.trim()
-  const track = document.querySelector('[data-testid="track-name"], h1')?.textContent?.trim()
+  const artist = document
+    .querySelector('[data-testid="artist-name"]')
+    ?.textContent?.trim()
+  const track = document
+    .querySelector('[data-testid="track-name"], h1')
+    ?.textContent?.trim()
   const key = findMetaValue('Key')
 
   if (!track && !title) return null
@@ -27,7 +31,9 @@ function findMetaValue(label: string): string | null {
   for (const item of items) {
     const labelEl = item.querySelector('span, dt')
     if (labelEl?.textContent?.trim() === label) {
-      const value = item.querySelector('span:last-child, dd')?.textContent?.trim()
+      const value = item
+        .querySelector('span:last-child, dd')
+        ?.textContent?.trim()
       if (value && value !== label) return value
     }
   }

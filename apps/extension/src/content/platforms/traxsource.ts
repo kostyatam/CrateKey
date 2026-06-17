@@ -6,8 +6,12 @@ export async function detect(): Promise<TrackInfo | null> {
   if (!/\/track\//.test(location.pathname)) return null
 
   const title = document.title
-  const artist = document.querySelector('.com-artists a, .artist a')?.textContent?.trim()
-  const track = document.querySelector('h1.title, .com-title')?.textContent?.trim()
+  const artist = document
+    .querySelector('.com-artists a, .artist a')
+    ?.textContent?.trim()
+  const track = document
+    .querySelector('h1.title, .com-title')
+    ?.textContent?.trim()
   const key = document.querySelector('.key')?.textContent?.trim()
 
   if (!track && !title) return null

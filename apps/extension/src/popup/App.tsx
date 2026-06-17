@@ -8,13 +8,18 @@ export function App() {
 
   useEffect(() => {
     void (async () => {
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
+      const [tab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
+      })
       if (tab?.url) {
         const message: GetKeyResultMessage = {
           type: 'GET_KEY_RESULT',
           payload: { pageUrl: tab.url },
         }
-        const response = (await chrome.runtime.sendMessage(message)) as KeyResult | null
+        const response = (await chrome.runtime.sendMessage(
+          message,
+        )) as KeyResult | null
         setResult(response)
       }
       setLoading(false)
@@ -22,7 +27,8 @@ export function App() {
   }, [])
 
   if (loading) return <Status text="Loading…" />
-  if (!result || result.key === null) return <Status text="No key detected on this page" />
+  if (!result || result.key === null)
+    return <Status text="No key detected on this page" />
 
   return (
     <div style={{ padding: 16 }}>
@@ -30,9 +36,17 @@ export function App() {
         {result.key}
         {result.mode ? ` ${result.mode}` : ''}
       </div>
-      {result.camelot && <div style={{ fontSize: 14, opacity: 0.8 }}>Camelot: {result.camelot}</div>}
-      {result.bpm !== undefined && <div style={{ fontSize: 14, opacity: 0.8 }}>{result.bpm} BPM</div>}
-      <div style={{ fontSize: 12, opacity: 0.5, marginTop: 8 }}>source: {result.confidence}</div>
+      {result.camelot && (
+        <div style={{ fontSize: 14, opacity: 0.8 }}>
+          Camelot: {result.camelot}
+        </div>
+      )}
+      {result.bpm !== undefined && (
+        <div style={{ fontSize: 14, opacity: 0.8 }}>{result.bpm} BPM</div>
+      )}
+      <div style={{ fontSize: 12, opacity: 0.5, marginTop: 8 }}>
+        source: {result.confidence}
+      </div>
     </div>
   )
 }
