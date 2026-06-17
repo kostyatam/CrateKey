@@ -10,7 +10,9 @@ const baseTrack: TrackInfo = {
 
 function makeDeps(overrides: Partial<ResolverDeps> = {}): ResolverDeps {
   return {
-    resolveViaBackend: vi.fn().mockResolvedValue({ key: null, confidence: 'none' }),
+    resolveViaBackend: vi
+      .fn()
+      .mockResolvedValue({ key: null, confidence: 'none' }),
     analyzeAudio: vi.fn().mockResolvedValue(null),
     cacheResult: vi.fn().mockResolvedValue(undefined),
     ...overrides,
@@ -29,7 +31,9 @@ describe('resolveKey hierarchy', () => {
 
   it('step 2/3: returns backend result (cache or getsongbpm)', async () => {
     const deps = makeDeps({
-      resolveViaBackend: vi.fn().mockResolvedValue({ key: 'F# Minor', bpm: 124, confidence: 'cache' }),
+      resolveViaBackend: vi
+        .fn()
+        .mockResolvedValue({ key: 'F# Minor', bpm: 124, confidence: 'cache' }),
     })
     const result = await resolveKey(baseTrack, deps)
 
@@ -40,12 +44,19 @@ describe('resolveKey hierarchy', () => {
 
   it('step 4: falls back to essentia when backend misses and audioUrl exists', async () => {
     const deps = makeDeps({
-      analyzeAudio: vi.fn().mockResolvedValue({ key: 'G', mode: 'major', bpm: 122 }),
+      analyzeAudio: vi
+        .fn()
+        .mockResolvedValue({ key: 'G', mode: 'major', bpm: 122 }),
     })
     const track = { ...baseTrack, audioUrl: 'https://cdn.example.com/a.mp3' }
     const result = await resolveKey(track, deps)
 
-    expect(result).toEqual({ key: 'G', mode: 'major', bpm: 122, confidence: 'essentia' })
+    expect(result).toEqual({
+      key: 'G',
+      mode: 'major',
+      bpm: 122,
+      confidence: 'essentia',
+    })
     expect(deps.cacheResult).toHaveBeenCalledWith(track, result)
   })
 
@@ -59,7 +70,10 @@ describe('resolveKey hierarchy', () => {
 
   it('step 5: returns none when everything misses', async () => {
     const deps = makeDeps()
-    const result = await resolveKey({ ...baseTrack, audioUrl: 'https://cdn.example.com/a.mp3' }, deps)
+    const result = await resolveKey(
+      { ...baseTrack, audioUrl: 'https://cdn.example.com/a.mp3' },
+      deps,
+    )
 
     expect(result).toEqual({ key: null, confidence: 'none' })
   })

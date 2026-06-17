@@ -15,7 +15,10 @@ export interface ResolverDeps {
  *  4. essentia.js via offscreen document (direct audio URL only)
  *  5. { key: null, confidence: "none" }
  */
-export async function resolveKey(track: TrackInfo, deps: ResolverDeps): Promise<KeyResult> {
+export async function resolveKey(
+  track: TrackInfo,
+  deps: ResolverDeps,
+): Promise<KeyResult> {
   // 1. DOM
   if (track.key) {
     return { key: track.key, confidence: 'dom' }

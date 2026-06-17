@@ -6,8 +6,9 @@ export async function detect(): Promise<TrackInfo | null> {
   if (!location.pathname.startsWith('/watch')) return null
 
   const title =
-    document.querySelector('h1.ytd-watch-metadata yt-formatted-string')?.textContent?.trim() ??
-    document.title.replace(/ - YouTube$/, '')
+    document
+      .querySelector('h1.ytd-watch-metadata yt-formatted-string')
+      ?.textContent?.trim() ?? document.title.replace(/ - YouTube$/, '')
 
   if (!title) return null
 

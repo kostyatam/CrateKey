@@ -1,4 +1,8 @@
-import type { ExtensionMessage, AnalyzeAudioResult, KeyResultResponse } from '../types/messages'
+import type {
+  ExtensionMessage,
+  AnalyzeAudioResult,
+  KeyResultResponse,
+} from '../types/messages'
 import type { KeyResult, TrackInfo } from '../types/track'
 import { resolveKey } from './resolver'
 import { resolveViaBackend, cacheResult } from './api'
@@ -6,7 +10,11 @@ import { resolveViaBackend, cacheResult } from './api'
 const resultsByPageUrl = new Map<string, KeyResult>()
 
 chrome.runtime.onMessage.addListener(
-  (message: ExtensionMessage, _sender, sendResponse: (r: KeyResultResponse) => void) => {
+  (
+    message: ExtensionMessage,
+    _sender,
+    sendResponse: (r: KeyResultResponse) => void,
+  ) => {
     if (message.type === 'TRACK_DETECTED') {
       void handleTrackDetected(message.payload)
       return false
@@ -26,11 +34,15 @@ async function handleTrackDetected(track: TrackInfo): Promise<void> {
     cacheResult,
   })
   resultsByPageUrl.set(track.pageUrl, result)
-  await chrome.storage.session.set({ [track.pageUrl]: result }).catch(() => undefined)
+  await chrome.storage.session
+    .set({ [track.pageUrl]: result })
+    .catch(() => undefined)
 }
 
 /** Step 4 runs in an offscreen document because the SW has no AudioContext. */
-async function analyzeAudio(audioUrl: string): Promise<AnalyzeAudioResult | null> {
+async function analyzeAudio(
+  audioUrl: string,
+): Promise<AnalyzeAudioResult | null> {
   await ensureOffscreenDocument()
   try {
     return (await chrome.runtime.sendMessage({
